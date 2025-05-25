@@ -26,6 +26,15 @@ jobs:
           & ([scriptblock]::Create($script)) -bebopcVersion $version
           echo "PATH=$env:USERPROFILE\.bebop;$env:PATH" >> $env:GITHUB_ENV
 
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          $url = "https://jrsoftware.org/download.php/is.exe"
+          $output = "$env:TEMP\is.exe"
+          Invoke-WebRequest $url -OutFile $output
+          Start-Process -FilePath $output -ArgumentList "/VERYSILENT /DIR=C:\InnoSetup" -Wait
+          echo "PATH=C:\InnoSetup;$env:PATH" >> $env:GITHUB_ENV
+
       - name: Build release
         shell: pwsh
         run: ./scripts/build-release.ps1
