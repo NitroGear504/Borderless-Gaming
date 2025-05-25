@@ -2,6 +2,7 @@ name: publish Borderless Gaming
 
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "*.*.*"
