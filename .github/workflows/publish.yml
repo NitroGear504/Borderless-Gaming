@@ -27,7 +27,11 @@ jobs:
       - name: Install bebopc
         shell: pwsh
         run: $version = '2.7.4'; $script = irm "https://bebop.sh"; & ([scriptblock]::Create($script)) -bebopcVersion $version
-
+      
+      - name: Add bebopc to PATH
+        shell: pwsh
+        run: echo "$env:USERPROFILE\.dotnet\tools" | Out-File -Append -Encoding ascii $env:GITHUB_PATH
+      
       - name: Build release
         shell: pwsh
         run: ./scripts/build-release.ps1
