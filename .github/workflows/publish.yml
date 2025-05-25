@@ -1,8 +1,5 @@
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "*.*.*"
 
 jobs:
   publish:
@@ -13,17 +10,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-            fetch-depth: 0
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "8.0.x" # SDK Version to use; x will use the latest version of the 7.0 channel
+          dotnet-version: "8.0.x"
           include-prerelease: true
 
       - name: Install bebopc
         shell: pwsh
-        run: $version = '2.7.4'; $script = irm "https://bebop.sh"; & ([scriptblock]::Create($script)) -bebopcVersion $version
+        run: |
+          $version = '2.7.4'
+          $script = irm "https://bebop.sh"
+          & ([scriptblock]::Create($script)) -bebopcVersion $version
+          echo "PATH=$env:USERPROFILE\.bebop;$env:PATH" >> $env:GITHUB_ENV
 
       - name: Build release
         shell: pwsh
