@@ -33,7 +33,7 @@ jobs:
         run: ./scripts/build-release.ps1
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: installer
           path: ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
