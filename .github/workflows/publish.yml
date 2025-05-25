@@ -1,6 +1,5 @@
 name: publish Borderless Gaming
 
-
 on:
   workflow_dispatch:
   push:
@@ -16,22 +15,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-            fetch-depth: 0
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "8.0.x" # SDK Version to use; x will use the latest version of the 7.0 channel
+          dotnet-version: "8.0.x"
           include-prerelease: true
 
-      - name: Install bebopc
+      - name: Install bebopc as dotnet tool
         shell: pwsh
-        run: $version = '2.7.4'; $script = irm "https://bebop.sh"; & ([scriptblock]::Create($script)) -bebopcVersion $version
-      
-      - name: Add bebopc to PATH
+        run: dotnet tool install -g BebopCompiler --version 2.7.4
+
+      - name: Add dotnet tools to PATH
         shell: pwsh
         run: echo "$env:USERPROFILE\.dotnet\tools" | Out-File -Append -Encoding ascii $env:GITHUB_PATH
-      
+
+      - name: Verify bebopc is available
+        shell: pwsh
+        run: bebopc --version
+
       - name: Build release
         shell: pwsh
         run: ./scripts/build-release.ps1
@@ -62,4 +65,3 @@ jobs:
           asset_path: ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
           asset_name: installer-win64.exe
           asset_content_type: application/octet-stream
-        
